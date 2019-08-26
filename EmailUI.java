@@ -6,8 +6,10 @@
 package TelaEmail;
 
 
+import javax.mail.Session;
+import javax.mail.internet.MimeMessage;
 import javax.swing.JOptionPane;
-import org.apache.commons.mail.DefaultAuthenticator;
+//import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.SimpleEmail;
 
 /**
@@ -15,9 +17,13 @@ import org.apache.commons.mail.SimpleEmail;
  * @author everkley
  */
 public class EmailUI extends javax.swing.JFrame {
-    String emailmeu = "emaildeloginaki";
-    String senha = "senhadoemaildeloginaki";
+    String emailmeu = new String(); //"everkley2@gmail.com";
+    String senha = new String(); //"xofndgdaarzifcca";
     SimpleEmail email = new SimpleEmail();
+    int login =0;
+    
+    
+    
     
     
     
@@ -33,6 +39,7 @@ public class EmailUI extends javax.swing.JFrame {
      */
     public EmailUI() {
         initComponents();
+        
     }
 
     /**
@@ -46,23 +53,24 @@ public class EmailUI extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
+        lblEmail = new javax.swing.JLabel();
         campoEmail = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
+        lblCopiaEmail = new javax.swing.JLabel();
         campoCopiaEmail = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         campoConteudoEmail = new javax.swing.JTextArea();
         jbtEnviar = new javax.swing.JButton();
         jBtnLimpar = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
+        lblAssunto = new javax.swing.JLabel();
         campoAssunto = new javax.swing.JTextField();
+        jBtnSair = new javax.swing.JButton();
 
         jLabel1.setText("jLabel1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("SMTP");
 
-        jLabel2.setText("Email:");
+        lblEmail.setText("Email:");
 
         campoEmail.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -70,7 +78,7 @@ public class EmailUI extends javax.swing.JFrame {
             }
         });
 
-        jLabel3.setText("CC");
+        lblCopiaEmail.setText("CC");
 
         campoConteudoEmail.setColumns(20);
         campoConteudoEmail.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
@@ -93,7 +101,14 @@ public class EmailUI extends javax.swing.JFrame {
             }
         });
 
-        jLabel4.setText("Assunto");
+        lblAssunto.setText("Assunto");
+
+        jBtnSair.setText("Sair");
+        jBtnSair.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jBtnSairMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -105,14 +120,16 @@ public class EmailUI extends javax.swing.JFrame {
                         .addGap(120, 120, 120)
                         .addComponent(jbtEnviar)
                         .addGap(73, 73, 73)
-                        .addComponent(jBtnLimpar))
+                        .addComponent(jBtnLimpar)
+                        .addGap(77, 77, 77)
+                        .addComponent(jBtnSair))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel4)
+                            .addComponent(lblAssunto)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel2)
-                                .addComponent(jLabel3)))
+                                .addComponent(lblEmail)
+                                .addComponent(lblCopiaEmail)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
@@ -126,22 +143,23 @@ public class EmailUI extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
+                    .addComponent(lblEmail)
                     .addComponent(campoEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
+                    .addComponent(lblCopiaEmail)
                     .addComponent(campoCopiaEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
+                    .addComponent(lblAssunto)
                     .addComponent(campoAssunto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jbtEnviar)
-                    .addComponent(jBtnLimpar))
+                    .addComponent(jBtnLimpar)
+                    .addComponent(jBtnSair))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -170,25 +188,51 @@ public class EmailUI extends javax.swing.JFrame {
     }//GEN-LAST:event_campoEmailActionPerformed
 
     private void jbtEnviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtEnviarActionPerformed
-        
+        System.out.println(emailmeu);
+            System.out.println(senha);
         
         try{
+            if(login==0){
+            email.setHostName("smtp.gmail.com");
+            email.setSmtpPort(465);
+            email.setAuthentication(emailmeu, senha);
+            email.setSSLOnConnect(true);
+            //login=1;
+            }
+            
+            
+            
+            
             email.setFrom(emailmeu);
+            
             email.setSubject(campoAssunto.getText());
             email.setMsg(campoConteudoEmail.getText());
             email.addTo(campoEmail.getText(),campoCopiaEmail.getText());
-            email.send();
+            email.send();         
+               
+            
             JOptionPane.showMessageDialog(null, "EMAIL ENVIADO");
             limpar();
+             
+            
         }catch(Exception erro){
             JOptionPane.showMessageDialog(null, "ERRO NO ENVIO");
+            System.out.println(erro);
         }
+        
        
     }//GEN-LAST:event_jbtEnviarActionPerformed
 
     private void jBtnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnLimparActionPerformed
         limpar();
     }//GEN-LAST:event_jBtnLimparActionPerformed
+
+    private void jBtnSairMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBtnSairMouseClicked
+    dispose();
+    TelaLogin tela2 = new TelaLogin();
+    tela2.setVisible(true);
+    
+    }//GEN-LAST:event_jBtnSairMouseClicked
 
     /**
      * @param args the command line arguments
@@ -215,11 +259,11 @@ public class EmailUI extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+       /* java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new EmailUI().setVisible(true);
             }
-        });
+        });*/
         
     }
 
@@ -229,12 +273,13 @@ public class EmailUI extends javax.swing.JFrame {
     private javax.swing.JTextField campoCopiaEmail;
     private javax.swing.JTextField campoEmail;
     private javax.swing.JButton jBtnLimpar;
+    private javax.swing.JButton jBtnSair;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton jbtEnviar;
+    private javax.swing.JLabel lblAssunto;
+    private javax.swing.JLabel lblCopiaEmail;
+    private javax.swing.JLabel lblEmail;
     // End of variables declaration//GEN-END:variables
 }
