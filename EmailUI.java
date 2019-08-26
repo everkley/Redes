@@ -15,8 +15,8 @@ import org.apache.commons.mail.SimpleEmail;
  * @author everkley
  */
 public class EmailUI extends javax.swing.JFrame {
-    String emailmeu = "everkley2@gmail.com";
-    String senha = "xofndgdaarzifcca";
+    String emailmeu = "emaildeloginaki";
+    String senha = "senhadoemaildeloginaki";
     SimpleEmail email = new SimpleEmail();
     
     
